@@ -19,7 +19,7 @@ jobs:
           command: nuget restore
       - run:
           name: "Install project dependencies"
-          command: msbuild restore
+          command: dotnet restore
       - save_cache:
           paths:
             - C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria\.nuget\packages
