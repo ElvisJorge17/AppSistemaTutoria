@@ -1,15 +1,17 @@
 version: 2.1
 
 orbs:
-  windows: circleci/windows@2.2.0
+  win: circleci/windows@2.4.0
 
 jobs:
-  test:
-    description: Setup and run application tests
+  build:
     executor:
-      name: windows/default
+      name: win/default
     working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
+      - run:
+          name: "Imprimir ruta de trabajo"
+          command: pwd
       - checkout:
           path: C:\Users\circleci\project
       - restore_cache:
@@ -23,40 +25,15 @@ jobs:
           command: dotnet restore
       - save_cache:
           paths:
-            - C:\Users\circleci\Proyecto Final\AppSistemaTutoria\.nuget\packages
+            - C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria\.nuget\packages
           key: dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
       - run:
-          name: "Run Application Tests"
-          command: dotnet test -v n --results-directory:test_coverage --collect:"Code Coverage"
-      - run:
-          name: "Print Working Directory"
-          command: pwd
+          name: "Build step"
+          command: dotnet publish -c Release -r win10-x64
       - store_artifacts:
-          path: C:\Users\circleci\project\test_coverage
-  build:
-    description: Build application with Release configuration
-    executor:
-      name: windows/default
-    working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
-    steps:
-      - checkout:
-          path: C:\Users\circleci\project
-      - run:
-          name: "Install nuget dependencies"
-          command: nuget restore
-      - run:
-          name: "Install project dependencies"
-          command: dotnet restore
-      - run:
-          name: "DOTNET_CLI_TELEMETRY_OPTOUT=1"
-          command: set DOTNET_CLI_TELEMETRY_OPTOUT=1
-      - run:
-          name: "Build Application according to some given configuration"
-          command: dotnet.exe build --configuration Release
+          path: .\bin\Release\netcoreapp2.1\win10-x64\publish\AppSistemaTutoria.exe
+
 workflows:
-  test_and_build:
+  PruebasFormulario:
     jobs:
-      - test
-      - build:
-          requires:
-            - test
+      - build
