@@ -19,14 +19,14 @@ jobs:
           command: nuget restore
       - run:
           name: "Install project dependencies"
-          command: MSBuild.exe restore
+          command: dotnet restore
       - save_cache:
           paths:
             - C:\Users\circleci\.nuget\packages
           key: dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
       - run:
           name: "Run Build step"
-          command: MSBuild.exe publish -c Release -r win10-x64
+          command: msbuild /p:TargetFramework=net47
       - run:
           name: "Test the executable"
           command: .\bin\Release\netcoreapp2.1\win10-x64\publish\circleci-demo-windows.exe 
