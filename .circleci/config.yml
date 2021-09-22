@@ -6,7 +6,7 @@ orbs:
 jobs:
 
   build:
-    docker:
+    machine:
       - image: aparker/circleci-dotnet-mono:latest
     executor:
       name: win/default
