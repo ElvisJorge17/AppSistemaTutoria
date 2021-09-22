@@ -9,9 +9,6 @@ jobs:
       name: win/default
     working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
-      - run:
-          name: "Imprimir ruta de trabajo"
-          command: pwd
       - checkout:
           path: C:\Users\circleci\project
       - restore_cache:
