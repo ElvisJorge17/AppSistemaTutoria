@@ -6,6 +6,8 @@ orbs:
 jobs:
 
   build:
+    docker:
+      - image: aparker/circleci-dotnet-mono:latest
     executor:
       name: win/default
       size: "medium"
