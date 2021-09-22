@@ -1,13 +1,14 @@
 version: 2.1
 
 orbs:
-  win: circleci/windows@2.4.0
+  windows: circleci/windows@2.2.0
 
 jobs:
-  build:
+  test:
+    description: Setup and run application tests
     executor:
-      name: win/default
-      size: "medium"
+      name: windows/default
+      size: medium
     working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
       - checkout:
@@ -23,15 +24,17 @@ jobs:
           command: dotnet restore
       - save_cache:
           paths:
-            - C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria\.nuget\packages
+            - C:\Users\circleci\Proyecto Final\AppSistemaTutoria\.nuget\packages
           key: dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
       - run:
-          name: "Build step"
-          command: msbuild CapaPresentaciones\CapaPresentaciones.csproj /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x86|x64|ARM"
+          name: "Run Application Tests"
+          command: msbuild test -v n --results-directory:test_coverage --collect:"Code Coverage"
+      - run:
+          name: "Print Working Directory"
+          command: pwd
       - store_artifacts:
-          path: .\bin\Release\netcoreapp2.1\win10-x64\publish\AppSistemaTutoria.exe
-
+          path: C:\Users\circleci\project\test_coverage
 workflows:
-  PruebasFormulario:
+  test_and_build:
     jobs:
-      - build
+      - test
