@@ -7,6 +7,7 @@ jobs:
   build:
     executor:
       name: win/default
+      size: "medium"
     working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
       - checkout:
