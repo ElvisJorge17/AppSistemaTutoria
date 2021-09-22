@@ -8,7 +8,6 @@ jobs:
     description: Setup and run application tests
     executor:
       name: windows/default
-      size: medium
     working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
       - checkout:
@@ -28,12 +27,31 @@ jobs:
           key: dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
       - run:
           name: "Run Application Tests"
-          command: msbuild test -v n --results-directory:test_coverage --collect:"Code Coverage"
+          command: dotnet test -v n --results-directory:test_coverage --collect:"Code Coverage"
       - run:
           name: "Print Working Directory"
           command: pwd
       - store_artifacts:
           path: C:\Users\circleci\project\test_coverage
+  build:
+    description: Build application with Release configuration
+    executor:
+      name: windows/default
+    working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
+    steps:
+      - checkout:
+          path: C:\Users\circleci\project
+      - run:
+          name: "Install nuget dependencies"
+          command: nuget restore
+      - run:
+          name: "Install project dependencies"
+          command: dotnet restore
+      - run:
+          name: "Build step"
+          command: |
+            $ProgressPreference = "SilentlyContinue"
+            msbuild CapaPresentaciones\CapaPresentaciones.csproj /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x86|x64|ARM" /p:BuildAppxUploadPackageForUap=true /p:AppxPackageSigningEnabled=true -restore
 workflows:
   test_and_build:
     jobs:
