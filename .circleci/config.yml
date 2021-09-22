@@ -37,8 +37,10 @@ jobs:
     description: Build application with Release configuration
     executor:
       name: windows/default
+      working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
-      - checkout
+      - checkout:
+          path: C:\Users\circleci\project
       - run:
           name: "Build Application according to some given configuration"
           command: dotnet.exe build --configuration Release
