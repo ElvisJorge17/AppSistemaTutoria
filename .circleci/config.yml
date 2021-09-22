@@ -22,11 +22,13 @@ jobs:
           command: msbuild restore
       - save_cache:
           paths:
-            - C:\Users\circleci\Proyecto Final\AppSistemaTutoria\.nuget\packages
+            - C:\Users\circleci\.nuget\packages
           key: dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
       - run: 
           name: build
           command: msbuild CapaPresentaciones\CapaPresentaciones.csproj /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x86|x64|ARM"
+      - store_artifacts:
+          path: C:\Users\circleci\project\test_coverage
 
 workflows:
   version: 2
