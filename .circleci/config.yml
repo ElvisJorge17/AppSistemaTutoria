@@ -7,10 +7,10 @@ jobs:
   build:
     executor:
       name: win/default
-      size: "medium"
-
+    working_directory: C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria
     steps:
-      - checkout
+      - checkout:
+          path: C:\Users\circleci\project
       - restore_cache:
           keys:
             - dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
@@ -22,16 +22,15 @@ jobs:
           command: msbuild restore
       - save_cache:
           paths:
-            - C:\Users\circleci\.nuget\packages
+            - C:\Users\circleci\project\Proyecto Final\AppSistemaTutoria\.nuget\packages
           key: dotnet-packages-v1-{{ checksum "CapaPresentaciones\CapaPresentaciones.csproj" }}
-      - run: 
-          name: build
+      - run:
+          name: "Build step"
           command: msbuild CapaPresentaciones\CapaPresentaciones.csproj /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x86|x64|ARM"
       - store_artifacts:
-          path: C:\Users\circleci\project\test_coverage
+          path: .\bin\Release\netcoreapp2.1\win10-x64\publish\AppSistemaTutoria.exe
 
 workflows:
-  version: 2
-  build_and_upload_artifact:
+  PruebasFormulario:
     jobs:
       - build
